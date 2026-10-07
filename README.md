@@ -30,7 +30,7 @@ Provide a local, inspectable NLP workflow and a compatibility score whose compon
 - Optionally compare relevant resume evidence with sentence embeddings. This is disabled by default to keep analysis fast.
 - Show matched and missing skills, recommendations, score components, and detected resume sections.
 - Store analysis metadata in local SQLite history; uploaded PDF contents are not stored.
-- Provide a JSON analysis endpoint, responsive interface, dark mode, and score charts.
+- Provide a JSON analysis endpoint, responsive interface, dark mode, and CSS-based score visualizations.
 
 ## NLP Pipeline
 
@@ -79,7 +79,7 @@ The TF-IDF component blends whole-document cosine similarity (45%) with the mean
 - scikit-learn and NumPy for TF-IDF and similarity
 - spaCy for optional linguistic analysis and model-backed lemmatization
 - Sentence Transformers for optional semantic scoring
-- Jinja templates, HTML, CSS, JavaScript, and Chart.js
+- Jinja templates, HTML, CSS, and JavaScript
 - SQLite for local analysis metadata
 
 ## Project Structure
