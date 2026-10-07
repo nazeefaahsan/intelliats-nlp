@@ -93,7 +93,7 @@ scoring/                Compatibility scoring and recommendations
 utils/                  PDF validation and text extraction
 data/                   Skill taxonomy and synonym JSON files
 templates/              Flask/Jinja pages
-static/css/              Application styles
+static/css/              Application styles and data-driven visualizations
 static/js/               Browser interactions
 tests/                  NLP and Flask route tests
 instance/                Runtime SQLite database (ignored by Git)

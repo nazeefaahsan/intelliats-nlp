@@ -10,6 +10,13 @@
   <a class="secondary" href="{{ url_for('home') }}">New analysis</a>
 </div>
 
+<section class="report-stats" aria-label="Analysis summary">
+  <article class="stat-card"><span class="stat-icon icon-match">✓</span><div><strong>{{ data.matched|length }}</strong><small>skills matched</small></div><span class="stat-accent"></span></article>
+  <article class="stat-card"><span class="stat-icon icon-required">◎</span><div><strong>{{ data.required_matched|length if data.required_matched is defined else '—' }}<small class="stat-denominator">{% if data.required_skill_count is defined and data.required_skill_count %}/ {{ data.required_skill_count }}{% endif %}</small></strong><small>required skills</small></div><span class="stat-accent accent-violet"></span></article>
+  <article class="stat-card"><span class="stat-icon icon-keyword">Aa</span><div><strong>{{ data.keyword_coverage if data.keyword_coverage is defined else '—' }}{% if data.keyword_coverage is defined %}<small class="stat-denominator">%</small>{% endif %}</strong><small>keyword coverage</small></div><span class="stat-accent accent-teal"></span></article>
+  <article class="stat-card"><span class="stat-icon icon-evidence">▤</span><div><strong>{{ data.relevant_evidence|length if data.relevant_evidence is defined else '—' }}</strong><small>evidence passages</small></div><span class="stat-accent accent-amber"></span></article>
+</section>
+
 <section class="results-grid score-grid">
   <article class="card score-card">
     <div class="eyebrow">OVERALL COMPATIBILITY</div>
@@ -48,7 +55,7 @@
   <h3>Relevant resume evidence</h3>
   <ul class="evidence-list">
     {% for item in data.relevant_evidence %}
-    <li><b>{{ item.section|title }} · {{ item.score }}% TF-IDF cosine</b><span>{{ item.text }}</span></li>
+    <li><b>{{ item.section|title }} · {{ item.score }}% TF-IDF cosine</b><span>{{ item.text }}</span><span class="evidence-meter"><span style="width: {{ item.score }}%"></span></span></li>
     {% endfor %}
   </ul>
   {% else %}
@@ -60,6 +67,17 @@
   <article class="card">
     <div class="eyebrow">SKILL ANALYSIS</div>
     <h2>Skills from the job description</h2>
+    {% if data.skill_categories %}
+    <div class="category-chart">
+      <div class="category-chart-head"><h3>Coverage by skill group</h3><div class="chart-legend"><span><i class="legend-hit"></i>Matched</span><span><i class="legend-gap"></i>Not detected</span></div></div>
+      {% for group in data.skill_categories %}
+      <div class="category-row">
+        <div class="category-label"><span>{{ group.name }}</span><b>{{ group.matched }} / {{ group.total }}</b></div>
+        <div class="category-track" role="meter" aria-label="{{ group.name }} skill coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ group.coverage }}"><span class="category-hit" style="width: {{ group.coverage }}%"></span></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     <h3>Matched</h3>
     <div class="chips">{% for x in data.matched %}<span class="chip good">{{ x }}</span>{% else %}<small>No shared taxonomy skills detected.</small>{% endfor %}</div>
     <h3>Not detected in resume</h3>

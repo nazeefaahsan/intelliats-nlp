@@ -1,1 +1,46 @@
-{% extends 'base.html' %}{% block title %}IntelliATS · Resume compatibility{% endblock %}{% block content %}<section class="hero"><div class="eyebrow"><span></span> NLP-POWERED COMPATIBILITY ANALYSIS</div><h1>Know how well your resume<br><em>matches the job.</em></h1><p>Understand your fit through skill extraction, TF-IDF, keyword matching and job requirement analysis.</p></section><section class="upload-card"><form id="uploadForm" method="post" action="{{ url_for('analyze') }}" enctype="multipart/form-data"><div class="upload-grid">{% for name,label,caption in [('resume_pdf','Your resume','Showcase your experience and skills'),('jd_pdf','Job description','The role you want to understand')] %}<label class="dropzone" data-dropzone><span class="file-icon">▤</span><strong>{{ label }}</strong><small>{{ caption }}</small><span class="drop-hint">Drop PDF here or <u>browse files</u></span><span class="file-info" hidden></span><input type="file" name="{{ name }}" accept="application/pdf,.pdf" required><button type="button" class="remove" hidden>Remove</button></label>{% endfor %}</div><div class="form-foot"><span>PDF only · Maximum 10 MB each · Files processed temporarily</span><button class="primary" type="submit">Analyze resume <b>→</b></button></div><div class="loader" id="loader" hidden><div class="spinner"></div><div><b>Analyzing your documents</b><p>Extract PDF text ? Match skills ? Compare TF-IDF terms ? Analyze job requirements</p></div></div></form></section>{% endblock %}
+{% extends 'base.html' %}
+{% block title %}IntelliATS · Resume compatibility{% endblock %}
+{% block content %}
+<section class="hero hero-home">
+  <div class="hero-copy">
+    <div class="eyebrow"><span></span> NLP-POWERED COMPATIBILITY ANALYSIS</div>
+    <h1>Make your resume<br><em>relevant to the role.</em></h1>
+    <p>See how your skills and experience align with a job description, with clear NLP evidence behind every signal.</p>
+    <div class="hero-points"><span>TF-IDF relevance</span><span>Skill taxonomy</span><span>Evidence-based</span></div>
+  </div>
+  <aside class="signal-map" aria-label="IntelliATS NLP analysis flow">
+    <div class="signal-map-head"><span>THE ANALYSIS FLOW</span><span class="signal-live"><i></i> EXPLAINABLE NLP</span></div>
+    <div class="signal-map-canvas">
+      <svg class="signal-connectors" viewBox="0 0 440 230" aria-hidden="true">
+        <path d="M132 60 C165 60 160 91 197 91 M132 170 C165 170 160 139 197 139 M300 91 C338 91 328 115 360 115 M300 139 C338 139 328 115 360 115" />
+      </svg>
+      <div class="map-node map-resume"><span class="map-icon">01</span><b>Resume PDF</b><small>Skills &amp; experience</small></div>
+      <div class="map-node map-job"><span class="map-icon">02</span><b>Job description</b><small>Requirements &amp; terms</small></div>
+      <div class="map-node map-tfidf"><span class="map-icon">Aa</span><b>TF-IDF</b><small>Sentence relevance</small></div>
+      <div class="map-node map-skills"><span class="map-icon">✓</span><b>Skill matching</b><small>Aliases normalized</small></div>
+      <div class="map-node map-score"><span class="map-icon">03</span><b>Match report</b><small>Score + evidence</small></div>
+    </div>
+    <div class="signal-map-foot"><span>TEXT SIGNALS</span><span>REQUIREMENTS</span><span>EXPLAINABLE RESULT</span></div>
+  </aside>
+</section>
+
+<section class="upload-card">
+  <div class="upload-heading"><div><div class="eyebrow">START AN ANALYSIS</div><h2>Compare two documents</h2></div><span class="privacy-mark">PDFs processed in memory</span></div>
+  <form id="uploadForm" method="post" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
+    <div class="upload-grid">
+      {% for name,label,caption in [('resume_pdf','Your resume','Highlight your experience and skills'),('jd_pdf','Job description','The role you want to understand')] %}
+      <label class="dropzone" data-dropzone>
+        <span class="file-icon">{% if name == 'resume_pdf' %}↥{% else %}≡{% endif %}</span>
+        <strong>{{ label }}</strong><small>{{ caption }}</small>
+        <span class="drop-hint">Drop PDF here or <u>browse files</u></span>
+        <span class="file-info" hidden></span>
+        <input type="file" name="{{ name }}" accept="application/pdf,.pdf" required>
+        <button type="button" class="remove" hidden>Remove</button>
+      </label>
+      {% endfor %}
+    </div>
+    <div class="form-foot"><span>PDF only · Up to 10 MB each · Files are not retained</span><button class="primary" type="submit">Analyze resume <b>→</b></button></div>
+    <div class="loader" id="loader" hidden><div class="spinner"></div><div><b>Analyzing your documents</b><p>Extracting text · Matching skills · Ranking relevant evidence</p></div></div>
+  </form>
+</section>
+{% endblock %}
