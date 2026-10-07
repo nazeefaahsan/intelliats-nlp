@@ -99,6 +99,10 @@ tests/                  NLP and Flask route tests
 instance/                Runtime SQLite database (ignored by Git)
 ```
 
+## Screenshots
+
+The interface and analysis report are available by running the application locally. Screenshots are not currently included in the repository.
+
 ## Installation
 
 ```powershell

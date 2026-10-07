@@ -1,6 +1,5 @@
 """IntelliATS Flask application."""
 from datetime import datetime
-from pathlib import Path
 import re
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, abort
