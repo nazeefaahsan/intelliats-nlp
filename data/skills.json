@@ -1,0 +1,12 @@
+{
+  "programming": ["Python", "Java", "C", "C++", "C#", "JavaScript", "TypeScript", "Go", "Rust", "PHP", "SQL"],
+  "web": ["HTML", "CSS", "JavaScript", "React", "Angular", "Vue", "Next.js", "Node.js", "Express.js"],
+  "machine_learning": ["Machine Learning", "Deep Learning", "Supervised Learning", "Unsupervised Learning", "Classification", "Regression", "Clustering", "Random Forest", "Decision Tree", "XGBoost", "LightGBM", "SVM", "KNN", "Neural Networks"],
+  "nlp": ["Natural Language Processing", "NLP", "Tokenization", "Stemming", "Lemmatization", "TF-IDF", "Word Embeddings", "BERT", "Transformers", "Text Classification", "Named Entity Recognition", "Sentiment Analysis"],
+  "data": ["NumPy", "Pandas", "Matplotlib", "Seaborn", "SciPy", "Statistics", "Data Analysis", "EDA", "Data Visualization", "Scikit-learn", "TensorFlow", "PyTorch"],
+  "database": ["MySQL", "PostgreSQL", "MongoDB", "SQLite", "Firebase", "Redis", "NoSQL"],
+  "cloud": ["AWS", "Azure", "Google Cloud", "Docker", "Kubernetes"],
+  "tools": ["Git", "GitHub", "GitLab", "Linux", "VS Code", "Postman", "Photoshop", "Illustrator", "InDesign", "Figma", "Canva", "After Effects", "Premiere Pro", "QuarkXPress"],
+  "cybersecurity": ["Cybersecurity", "Ethical Hacking", "Penetration Testing", "OWASP", "Network Security", "Cryptography", "Digital Forensics"],
+  "design": ["Design", "Graphic Design", "Social Media Graphics", "Video Editing", "Presentations"]
+}

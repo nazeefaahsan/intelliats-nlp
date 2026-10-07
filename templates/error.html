@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}Unable to analyze · IntelliATS{% endblock %}{% block content %}<section class="card error-card"><div class="eyebrow">ANALYSIS INTERRUPTED</div><h1>We couldn't read that upload.</h1><p>{{ message }}</p><a class="primary" href="{{ url_for('home') }}">Return to upload</a></section>{% endblock %}
