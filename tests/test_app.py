@@ -30,4 +30,5 @@ def test_successful_analysis_and_history(tmp_path, monkeypatch):
     webapp.ANALYSIS_CACHE.pop(analysis_id,None)
     old_report=client.get(f"/results/{analysis_id}")
     assert old_report.status_code==200
-    assert b"predates semantic-model availability" in old_report.data
+    assert b"How this score was calculated" in old_report.data
+    assert b"Semantic embeddings are off for fast analysis" not in old_report.data

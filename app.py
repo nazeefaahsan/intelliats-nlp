@@ -51,8 +51,8 @@ def analyze():
     required_score=(len(required & set(rskills))/len(required)*100) if required else None
     overall_skill_score=(len(matched)/len(jskills)*100) if jskills else 0.0
     skill_score=round(.70*required_score+.30*overall_skill_score if required_score is not None else overall_skill_score,1)
-    tfidf=tfidf_compare(rp.normalized_text,jp.normalized_text)
     sections=parse_sections(resume_text)
+    tfidf=tfidf_compare(rp.normalized_text,jp.normalized_text,sections,jd_info)
     semantic=semantic_compare(resume_text,jd_text,sections,jd_info,rskills,jskills) if SEMANTIC_ENABLED else {"score":None,"available":False,"details":{},"message":"Semantic embeddings are disabled for fast analysis. Set INTELLIATS_SEMANTIC=1 to enable them."}
     resume_lower=resume_text.lower()
     keywords=extract_keywords(jd_text,tfidf["top_terms"],jskills,jd_info["required_skills"]); keyword_match=[x for x in keywords if re.search(r"(?<![\w])"+re.escape(x.lower())+r"(?![\w])",resume_lower)]
@@ -63,7 +63,7 @@ def analyze():
     applicable={key:weight for key,weight in section_weights.items() if key in sections}
     structure_score=round(100*sum(applicable.values()),1)
     ats,weights=score_analysis(semantic["score"],tfidf["score"],skill_score,keyword_score,structure_score)
-    payload={"score":ats,"components":{"semantic":semantic["score"],"tfidf":tfidf["score"],"skills":skill_score,"keywords":keyword_score,"structure":structure_score},"semantic_details":semantic.get("details",{}),"semantic_message":semantic.get("message"),"weights":weights,"semantic_available":semantic["available"],"resume_skills":resume_skills,"jd_skills":jd_skills,"matched":matched,"missing":missing,"keywords":keywords,"keyword_match":keyword_match,"sections":sections,"jd":jd_info,"tokens":rp.tokens[:100],"lemmas":rp.lemmas[:100],"recommendations":recommendations(missing,sections,[k for k in keywords if not re.search(r"(?<![\w])"+re.escape(k.lower())+r"(?![\w])",resume_lower)]),"resume_name":secure_filename(resume.filename),"jd_name":secure_filename(jd.filename)}
+    payload={"score":ats,"components":{"semantic":semantic["score"],"tfidf":tfidf["score"],"skills":skill_score,"keywords":keyword_score,"structure":structure_score},"semantic_details":semantic.get("details",{}),"semantic_message":semantic.get("message"),"weights":weights,"semantic_available":semantic["available"],"resume_skills":resume_skills,"jd_skills":jd_skills,"matched":matched,"missing":missing,"keywords":keywords,"keyword_match":keyword_match,"sections":sections,"jd":jd_info,"tfidf_document_score":tfidf["document_score"],"tfidf_context_score":tfidf["context_score"],"relevant_evidence":tfidf["evidence"],"tokens":rp.tokens[:100],"lemmas":rp.lemmas[:100],"recommendations":recommendations(missing,sections,[k for k in keywords if not re.search(r"(?<![\w])"+re.escape(k.lower())+r"(?![\w])",resume_lower)]),"resume_name":secure_filename(resume.filename),"jd_name":secure_filename(jd.filename)}
     con=db(); cur=con.execute("INSERT INTO analyses(timestamp,job_title,ats_score,semantic_score,tfidf_score,skill_score) VALUES(?,?,?,?,?,?)",(datetime.now().isoformat(timespec="minutes"),jd_info["title"],ats,semantic["score"],tfidf["score"],skill_score)); row_id=cur.lastrowid; con.commit(); con.close()
     ANALYSIS_CACHE[row_id]=payload
     return redirect(url_for("results", analysis_id=row_id))

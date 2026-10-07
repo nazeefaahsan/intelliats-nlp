@@ -5,7 +5,7 @@
 ![NLP](https://img.shields.io/badge/Focus-NLP-6A5ACD)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-IntelliATS is an academic resume-analysis app that compares a resume PDF with a job-description PDF. It combines taxonomy-based skill matching, TF-IDF, keyword coverage, resume sections, and an optional sentence-embedding comparison to produce an explainable compatibility estimate.
+IntelliATS is an academic resume-analysis app that compares a resume PDF with a job-description PDF. It combines normalized skill matching, TF-IDF, sentence-level relevance, keyword coverage, resume sections, and optional sentence embeddings to produce an explainable compatibility estimate.
 
 It is an educational ATS simulation. It does not reproduce proprietary applicant-tracking systems or predict hiring outcomes.
 
@@ -26,6 +26,7 @@ Provide a local, inspectable NLP workflow and a compatibility score whose compon
 - Extract skills with an editable taxonomy and synonym map.
 - Identify likely job title, required and preferred skills, responsibilities, education, and experience signals.
 - Rank job-description terms and compare documents with TF-IDF and cosine similarity.
+- Rank resume sentences by relevance to extracted job requirements and show the supporting evidence.
 - Optionally compare relevant resume evidence with sentence embeddings. This is disabled by default to keep analysis fast.
 - Show matched and missing skills, recommendations, score components, and detected resume sections.
 - Store analysis metadata in local SQLite history; uploaded PDF contents are not stored.
@@ -44,14 +45,14 @@ Normalization → tokenization → stop-word filtering → lemmatization
                 ↓
  Taxonomy skills + JD requirements + keywords
                 ↓
-      TF-IDF + cosine similarity
+ TF-IDF document similarity + requirement-to-sentence relevance
                 ↓
  Optional sentence embeddings (opt-in)
                 ↓
  Explainable score + gaps + recommendations
 ```
 
-The project demonstrates tokenization, stop-word removal, lemmatization, n-grams, TF-IDF, cosine similarity, synonym normalization, phrase-based requirement detection, sentence embeddings (optional), section parsing, keyword extraction, and weighted scoring. The `nlp/linguistic_analyzer.py` module also contains optional spaCy POS, entity, and noun-phrase analysis utilities.
+The project demonstrates tokenization, stop-word removal, lemmatization, n-grams, TF-IDF, cosine similarity, sentence ranking, synonym normalization, phrase-based requirement detection, sentence embeddings (optional), section parsing, keyword extraction, and weighted scoring. The `nlp/linguistic_analyzer.py` module also contains optional spaCy POS, entity, and noun-phrase analysis utilities.
 
 ## ATS Scoring
 
@@ -69,7 +70,7 @@ ATS = 0.32 × TF-IDF + 0.40 × skills
     + 0.18 × keywords + 0.10 × structure
 ```
 
-The skill component gives 70% weight to detected required skills and 30% to all detected technical skills. If the job description has no detected required skills, it uses the overall technical-skill match. The keyword component combines keyword coverage (70%) and required-skill coverage (30%). Structure is the sum of weights for detected sections: summary 10%, objective 5%, skills 25%, experience 25%, internship 15%, and projects 20%. These are heuristic signals, not a hiring decision.
+The TF-IDF component blends whole-document cosine similarity (45%) with the mean similarity of the three most relevant resume sentences to extracted job requirements (55%). The report shows the sentences that support this evidence score. The skill component gives 70% weight to detected required skills and 30% to all detected technical skills. If the job description has no detected required skills, it uses the overall technical-skill match. The keyword component combines keyword coverage (70%) and required-skill coverage (30%). Structure is the sum of weights for detected sections: summary 10%, objective 5%, skills 25%, experience 25%, internship 15%, and projects 20%. These are heuristic signals, not a hiring decision.
 
 ## Technology Stack
 

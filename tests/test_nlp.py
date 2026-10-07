@@ -36,6 +36,10 @@ def test_taxonomy_skill_extraction_and_alias():
     found=flatten(extract_skills("Built NLP tools with Python, pandas and sklearn."))
     assert "Python" in found and "Natural Language Processing" in found and "Scikit-learn" in found
 def test_tfidf_identical_text(): assert compare("python machine learning", "python machine learning")["score"] > 99
+def test_tfidf_ranks_requirement_relevant_resume_evidence():
+    result=compare("python nlp recommendation systems website design", "python natural language processing", {"experience":"Built recommendation systems using Python and natural language processing.","projects":"Designed a personal website."}, {"title":"NLP Engineer","required_skills":["Python","Natural Language Processing"],"preferred_skills":[],"responsibilities":["Build text classification systems"]})
+    assert result["context_score"] is not None
+    assert result["evidence"][0]["section"] == "experience"
 def test_section_detection(): assert "projects" in parse_sections("Projects\nBuilt an NLP tool")
 def test_score_fallback_is_weighted():
     score,weights=score_analysis(None,80,70,60,50)
